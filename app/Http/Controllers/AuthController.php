@@ -15,15 +15,26 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function register(AuthRequests $request){
-
+    public function register(AuthRequests $request): object
+    {
+        $this->authService->createUser($request->all());
+        return response()->json(['message' => 'User registered successfully.']);
     }
 
-    public function login(AuthRequests $request){
+    public function login(AuthRequests $request): object
+    {
+        $token = $this->authService->authUser($request->all());
 
+        if (!$token) {
+            return $this->jsonResponse([], 401, 'Invalid credentials');
+        }
+
+        return $this->jsonResponse(['auth_token' => $token], 200, 'User logged in successfully.');
     }
 
-    public function logout(Request $request){
-
+    public function logout(Request $request): object
+    {
+        $request->user()->tokens()->delete();
+        return response()->json(['message' => 'User logout successfully.']);
     }
 }
