@@ -29,12 +29,30 @@ class AuthController extends Controller
             return $this->jsonResponse([], 401, 'Invalid credentials');
         }
 
-        return $this->jsonResponse(['auth_token' => $token], 200, 'User logged in successfully.');
+        return response()->json(['message' => 'User logged in successfully.'])
+            ->cookie(
+                'auth_token',
+                $token,
+                60 * 24,
+                '/',
+                null,
+                false,
+                true
+            );
     }
 
     public function logout(Request $request): object
     {
         $request->user()->tokens()->delete();
-        return response()->json(['message' => 'User logout successfully.']);
+        return response()->json(['message' => 'User logout successfully.'])
+            ->cookie(
+                'auth_token',
+                '',
+                -1,
+                '/',
+                null,
+                false,
+                true
+            );
     }
 }
