@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequests;
+use App\Http\Requests\RegisterRequests;
 use App\Services\AuthServices;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function register(AuthRequests $request): object
+    public function register(RegisterRequests $request): object
     {
         $this->authService->createUser($request->all());
         return response()->json(['message' => 'User registered successfully.']);
