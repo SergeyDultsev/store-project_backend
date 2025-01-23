@@ -17,7 +17,7 @@ class AuthServices{
         $user->save();
     }
 
-    public function authUser(array $data): ?string
+    public function authUser(array $data): ?array
     {
         $user = User::where('email', $data['email'])->first();
 
@@ -25,6 +25,9 @@ class AuthServices{
             return null;
         }
 
-        return $user->createToken('authToken')->plainTextToken;
+        return [
+            'token' => $user->createToken('authToken')->plainTextToken,
+            'user' => $user,
+        ];
     }
 }

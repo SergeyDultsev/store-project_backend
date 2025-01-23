@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequests;
 use App\Http\Requests\RegisterRequests;
+use App\Models\User;
 use App\Services\AuthServices;
 use Illuminate\Http\Request;
 
@@ -19,21 +20,25 @@ class AuthController extends Controller
     public function register(RegisterRequests $request): object
     {
         $this->authService->createUser($request->all());
-        return response()->json(['message' => 'User registered successfully.']);
+        return $this->jsonResponse([], 201, 'User registered successfully.');
     }
 
     public function login(AuthRequests $request): object
     {
-        $token = $this->authService->authUser($request->all());
+        $userData = $this->authService->authUser($request->all());
 
-        if (!$token) {
+        if (!$userData) {
             return $this->jsonResponse([], 401, 'Invalid credentials');
         }
 
-        return response()->json(['message' => 'User logged in successfully.'])
+        return $this->jsonResponse([
+            $userData['id'],
+            $userData['name'],
+            $userData['email'],
+        ], 200, 'User logged in successfully.')
             ->cookie(
                 'auth_token',
-                $token,
+                $userData['token'],
                 60 * 24,
                 '/',
                 null,
@@ -45,7 +50,7 @@ class AuthController extends Controller
     public function logout(Request $request): object
     {
         $request->user()->tokens()->delete();
-        return response()->json(['message' => 'User logout successfully.'])
+        return $this->jsonResponse([], 200, 'User logout successfully.')
             ->cookie(
                 'auth_token',
                 '',
