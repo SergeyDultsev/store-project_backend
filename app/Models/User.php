@@ -13,7 +13,7 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
 
-    protected $primaryKey = 'string';
+    protected $primaryKey = 'id';
     protected $keyType = 'string';
     public $incrementing = false;
 
