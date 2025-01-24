@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequests;
 use App\Http\Requests\RegisterRequests;
-use App\Models\User;
 use App\Services\AuthServices;
 use Illuminate\Http\Request;
 
@@ -32,13 +31,13 @@ class AuthController extends Controller
         }
 
         return $this->jsonResponse([
-            $userData['id'],
-            $userData['name'],
-            $userData['email'],
+            'id' => $userData['id'],
+            'name' => $userData['name'],
+            'email' => $userData['email'],
         ], 200, 'User logged in successfully.')
             ->cookie(
                 'auth_token',
-                $userData['token'],
+                $userData['token'] ?? '',
                 60 * 24,
                 '/',
                 null,

@@ -21,13 +21,15 @@ class AuthServices{
     {
         $user = User::where('email', $data['email'])->first();
 
-        if(!$user || !Hash::check($data['password'], $user->password)){
+        if (!$user || !Hash::check($data['password'], $user->password)) {
             return null;
         }
 
         return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
             'token' => $user->createToken('authToken')->plainTextToken,
-            'user' => $user,
         ];
     }
 }
