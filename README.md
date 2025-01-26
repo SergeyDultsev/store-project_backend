@@ -29,3 +29,13 @@
     ```bash
     docker-compose up -d
     ```
+
+4. Запустите миграции:
+    ```bash
+    docker-compose exec backend php artisan migrate
+    ```
+
+5. Запустите сидеры продуктов:
+    ```bash
+    docker-compose exec backend php artisan db:seed --class=ProductSeeder
+    ```

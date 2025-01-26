@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-RUN apt-get update && apt-get install -y php-exif \
+RUN apt-get update && \
     apt-get install -y libzip-dev unzip default-libmysqlclient-dev libexif-dev && \
     docker-php-ext-configure exif && \
     docker-php-ext-install pdo pdo_mysql zip exif
