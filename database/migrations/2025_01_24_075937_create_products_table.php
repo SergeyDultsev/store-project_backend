@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('product_name')->nullable();
             $table->decimal('product_price', 8, 2)->nullable();
             $table->string('product_image')->nullable();
+            $table->string('product_state')->default('available')->nullable()
         });
     }
 
