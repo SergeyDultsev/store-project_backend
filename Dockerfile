@@ -1,16 +1,13 @@
 FROM php:8.2-fpm
 
-# Установим системные зависимости и необходимые PHP-расширения
-RUN apt-get update && apt-get install -y \
-    unzip \
-    git \
-    curl \
-    libzip-dev \
-    default-libmysqlclient-dev \
-    libexif-dev && \
-    docker-php-ext-configure zip && \
-    docker-php-ext-install pdo pdo_mysql zip exif && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y libzip-dev unzip default-libmysqlclient-dev
+
+RUN curl -sSLf \
+        -o /usr/local/bin/install-php-extensions \
+        https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
+    chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions ftp gd redis ldap soap bcmath exif iconv mbstring mysqli pdo_mysql intl zip xml simplexml xmlreader pcntl sodium sockets
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -20,7 +17,8 @@ COPY . /var/www
 
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www
 
-RUN composer install --no-interaction --optimize-autoloader
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --optimize-autoloader && \
+    composer require filament/filament:"^3.2" -W spatie/laravel-medialibrary --no-interaction --optimize-autoloader
 
 EXPOSE 9000
 
