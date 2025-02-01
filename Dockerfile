@@ -17,9 +17,6 @@ COPY . /var/www
 
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www
 
-RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --optimize-autoloader && \
-    composer require filament/filament:"^3.2" -W spatie/laravel-medialibrary --no-interaction --optimize-autoloader
-
 EXPOSE 9000
 
 CMD ["php-fpm"]
