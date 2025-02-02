@@ -27,7 +27,7 @@ class AuthController extends Controller
         $userData = $this->authService->authUser($request->all());
 
         if (!$userData) {
-            return $this->jsonResponse([], 401, 'Invalid credentials');
+            return $this->jsonResponse([], 401, 'There is no such account.');
         }
 
         return $this->jsonResponse([
@@ -59,5 +59,16 @@ class AuthController extends Controller
                 false,
                 true
             );
+    }
+
+    public function check(Request $request): object
+    {
+        $userStateAuth = auth()->check();
+
+        if(!$userStateAuth){
+            return $this->jsonResponse(['authorized' => false], 200, 'User not authorized');
+        }
+
+        return $this->jsonResponse(['authorized' => true], 200, 'User authorized.');
     }
 }
