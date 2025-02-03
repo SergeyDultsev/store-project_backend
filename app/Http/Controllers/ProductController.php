@@ -19,14 +19,14 @@ class ProductController extends Controller
 
     public function index(): JsonResponse
     {
-        $productList = $this->productService->indexProduct();
-        if ($productList->total() === 0) return $this->jsonResponse([], 404, "Product not found");
-        return $this->jsonResponse(ProductResource::collection($productList), 200, "Successfully");
+        $productData = $this->productService->indexProduct();
+        if ($productData->total() === 0) return $this->jsonResponse([], 404, "Product not found");
+        return $this->jsonResponse(ProductResource::collection($productData), 200, "Successfully");
     }
 
     public function store(ProductRequests $request): JsonResponse
     {
-        $this->productService->createProduct($request->validated());
+        $this->productService->createProduct($request->all());
         return $this->jsonResponse([], 201, 'Product created successfully.');
     }
 
@@ -39,7 +39,7 @@ class ProductController extends Controller
 
     public function update(ProductRequests $request, int $productId): JsonResponse
     {
-        $product = $this->productService->updateProduct($productId, $request->validated());
+        $product = $this->productService->updateProduct($productId, $request->all());
         if (!$product) return $this->jsonResponse([], 404, "Product not found");
         return $this->jsonResponse([], 200, 'Product updated successfully.');
     }
