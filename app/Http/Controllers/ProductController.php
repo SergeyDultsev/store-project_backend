@@ -52,7 +52,7 @@ class ProductController extends Controller
 
     }
 
-    public function update(ProductRequests $request, int $productId): JsonResponse
+    public function update(ProductRequests $request, $productId): JsonResponse
     {
         $product = $this->productService->updateProduct($productId, $request->all());
 
@@ -61,7 +61,7 @@ class ProductController extends Controller
         return $this->jsonResponse([], 200, 'Product updated successfully.');
     }
 
-    public function destroy(int $productId): JsonResponse
+    public function destroy($productId): JsonResponse
     {
         $this->productService->deleteProduct($productId);
 

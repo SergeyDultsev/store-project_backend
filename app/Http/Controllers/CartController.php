@@ -16,7 +16,24 @@ class CartController extends Controller
         $this->cartServices = $cartServices;
     }
 
-    public function store(int $productId): JsonResponse
+    public function index(): JsonResponse
+    {
+        $cartData = $this->cartServices->indexCart();
+
+        if ($cartData->isEmpty()) return $this->jsonResponse([], 404, "Cart not found");
+
+        return $this->jsonResponse([
+            'cart' => CartResource::collection($cartData),
+            'meta' => [
+                'current_page' => $cartData->currentPage(),
+                'per_page' => $cartData->perPage(),
+                'total' => $cartData->total(),
+                'last_page' => $cartData->lastPage(),
+            ]
+        ], 200, "Successfully");
+    }
+
+    public function store($productId): JsonResponse
     {
         $this->cartServices->addCart($productId);
         return $this->jsonResponse([], 201, 'Cart added successfully');
@@ -27,21 +44,12 @@ class CartController extends Controller
         //
     }
 
-    public function index(): JsonResponse
-    {
-        $cartData = $this->cartServices->indexCart();
-
-        if ($cartData->isEmpty()) return $this->jsonResponse([], 404, "Cart not found");
-
-        return $this->jsonResponse([CartResource::collection($cartData)], 200, "Successfully");
-    }
-
-    public function update(CartUpdateRequests $request, int $cartId): JsonResponse
+    public function update(CartUpdateRequests $request, $cartId): JsonResponse
     {
         $quantity = $request->input('quantity');
         $cart = $this->cartServices->updateCart($cartId, $quantity);
 
-        if (!$cart) return $this->jsonResponse([], 404, "Cart not found");
+        if (!$cart) return $this->jsonResponse([$cart], 404, "Cart not found");
         return $this->jsonResponse(['cart' => $cart], 200, "Cart updated successfully");
     }
 

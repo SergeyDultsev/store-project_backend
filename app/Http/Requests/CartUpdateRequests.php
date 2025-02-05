@@ -11,7 +11,7 @@ class CartUpdateRequests extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class CartUpdateRequests extends FormRequest
     public function rules(): array
     {
         return [
-            'quantity' => 'required|integer|min:1',
+            'quantity' => 'required|integer',
         ];
     }
 

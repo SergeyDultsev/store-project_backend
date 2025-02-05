@@ -3,12 +3,14 @@
 namespace App\Services;
 
 use App\Models\Cart;
+use App\Models\Product;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Ramsey\Uuid\Uuid;
 
 class CartServices{
-    public function indexCart(): object
+    public function indexCart(): LengthAwarePaginator
     {
-        return Cart::with('product')->get();
+        return Cart::with('product')->paginate(100);
     }
 
     public function addCart($productId): void
@@ -19,11 +21,15 @@ class CartServices{
         $cart->user_id = auth()->id();
         $cart->quantity = 1;
         $cart->save();
+
+        $product = Product::where("product_id", $productId)->first();
+        $product->product_state = "in_cart";
+        $product->save();
     }
 
-    public function updateCart(int $cartId, int $quantity): ?Cart
+    public function updateCart($cartId, int $quantity): ?Cart
     {
-        $cart = Cart::find($cartId);
+        $cart = Cart::where("cart_id", $cartId)->first();
         if (!$cart) return null;
 
         if ($cart->quantity + $quantity <= 0) return null;
@@ -35,8 +41,13 @@ class CartServices{
 
     public function deleteCart($cartId): ?Cart
     {
-        $cart = Cart::find($cartId);
+        $cart = Cart::where("cart_id", $cartId)->first();
         if (!$cart) return null;
+
+        $productId = $cart->product_id;
+        $product = Product::where("product_id", $productId)->first();
+        $product->product_state = "available";
+        $product->save();
 
         $cart->delete();
         return $cart;
