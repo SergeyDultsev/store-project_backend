@@ -15,9 +15,10 @@ return new class extends Migration
             $table->uuid("cart_id")->primary();
             $table->uuid("product_id");
             $table->uuid("user_id");
+            $table->integer('quantity');
             $table->timestamps();
 
-            $table->foreign("product_id")->references("id")->on("products")->onDelete("cascade");
+            $table->foreign("product_id")->references("product_id")->on("products")->onDelete("cascade");
             $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
         });
     }

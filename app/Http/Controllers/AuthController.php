@@ -6,6 +6,7 @@ use App\Http\Requests\AuthRequests;
 use App\Http\Requests\RegisterRequests;
 use App\Services\AuthServices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -63,9 +64,7 @@ class AuthController extends Controller
 
     public function check(Request $request): object
     {
-        $userStateAuth = auth()->check();
-
-        if(!$userStateAuth){
+        if (!auth()->check()) {
             return $this->jsonResponse(['authorized' => false], 200, 'User not authorized');
         }
 

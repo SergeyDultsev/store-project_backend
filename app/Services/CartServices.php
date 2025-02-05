@@ -1,10 +1,16 @@
 <?php
 
+namespace App\Services;
 
 use App\Models\Cart;
 use Ramsey\Uuid\Uuid;
 
 class CartServices{
+    public function indexCart(): object
+    {
+        return Cart::with('product')->get();
+    }
+
     public function addCart($productId): void
     {
         $cart = new Cart();
@@ -15,8 +21,24 @@ class CartServices{
         $cart->save();
     }
 
-    public function index(): object
+    public function updateCart(int $cartId, int $quantity): ?Cart
     {
-        return Cart::where('user_id', auth()->id())->get();
+        $cart = Cart::find($cartId);
+        if (!$cart) return null;
+
+        if ($cart->quantity + $quantity <= 0) return null;
+        $cart->quantity += $quantity;
+        $cart->save();
+
+        return $cart;
+    }
+
+    public function deleteCart($cartId): ?Cart
+    {
+        $cart = Cart::find($cartId);
+        if (!$cart) return null;
+
+        $cart->delete();
+        return $cart;
     }
 }

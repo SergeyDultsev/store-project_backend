@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Product;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
 
@@ -12,7 +11,7 @@ class ProductServices
 {
     public function indexProduct(): LengthAwarePaginator
     {
-        return Product::paginate(10);
+        return Product::paginate(100);
     }
 
     public function createProduct(array $data): void
@@ -22,8 +21,8 @@ class ProductServices
         $product->product_name = $data['name'];
         $product->product_price = $data['price'];
 
-        if (isset($data['image']) && $data['image'] instanceof UploadedFile) {
-            $product->image = $data['image']->store('product_images', 'public');
+        if (isset($data['image']) && $data['image']) {
+            $product->addMediaFromRequest('image')->toMediaCollection('image');
         }
 
         $product->save();
@@ -41,8 +40,8 @@ class ProductServices
         $product->product_name = $data['name'];
         $product->product_price = $data['price'];
 
-        if (isset($data['image']) && $data['image'] instanceof UploadedFile) {
-            $product->image = $data['image']->store('product_image', 'public');
+        if (isset($data['image']) && $data['image']) {
+            $product->addMediaFromRequest('image')->toMediaCollection('image');
         }
 
         $product->save();

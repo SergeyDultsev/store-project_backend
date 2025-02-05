@@ -11,7 +11,7 @@ class ProductRequests extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,24 @@ class ProductRequests extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|max:255',
+            'price' => 'required|numeric|min:0',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Product name is required.',
+            'name.string' => 'The name must be a string.',
+            'name.max' => 'The name must not exceed 255 characters.',
+            'price.required' => 'The price of the item is required.',
+            'price.numeric' => 'The price must be a number.',
+            'price.min' => 'The price cannot be negative.',
+            'image.image' => 'The file must be an image.',
+            'image.mimes' => 'Accepted formats: jpeg, png, jpg, gif, svg.',
+            'image.max' => 'Maximum image size is 2MB.',
         ];
     }
 }

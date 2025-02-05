@@ -2,40 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CartRequests;
-use App\Http\Resources\ProductResource;
-use CartServices;
+use App\Http\Requests\CartUpdateRequests;
+use App\Http\Resources\CartResource;
+use App\Services\CartServices;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CartController extends Controller
 {
-    protected $cartService;
+    protected CartServices $cartServices;
 
-    public function __construct(CartServices $cartService)
+    public function __construct(CartServices $cartServices)
     {
-        $this->cartServices = $cartService;
+        $this->cartServices = $cartServices;
     }
 
-    public function store(CartRequests $request): JsonResponse
+    public function store(int $productId): JsonResponse
     {
-        $this->cartServices->addCart($request->all());
+        $this->cartServices->addCart($productId);
         return $this->jsonResponse([], 201, 'Cart added successfully');
+    }
+
+    public function show()
+    {
+        //
     }
 
     public function index(): JsonResponse
     {
         $cartData = $this->cartServices->indexCart();
-        if (!$cartData->total() === 0) return $this->jsonResponse([], 404, "Cart not found");
-        return $this->jsonResponse([ProductResource::collection($cartData)], 200, "Successfully");
+
+        if ($cartData->isEmpty()) return $this->jsonResponse([], 404, "Cart not found");
+
+        return $this->jsonResponse([CartResource::collection($cartData)], 200, "Successfully");
     }
 
-    public function update(CartRequests $request): JsonResponse
+    public function update(CartUpdateRequests $request, int $cartId): JsonResponse
     {
+        $quantity = $request->input('quantity');
+        $cart = $this->cartServices->updateCart($cartId, $quantity);
 
+        if (!$cart) return $this->jsonResponse([], 404, "Cart not found");
+        return $this->jsonResponse(['cart' => $cart], 200, "Cart updated successfully");
     }
 
-    public function destroy(CartRequests $request): JsonResponse
+    public function destroy($cartId): JsonResponse
     {
+        $cart = $this->cartServices->deleteCart($cartId);
 
+        if (!$cart) return $this->jsonResponse([], 404, "Cart not found");
+        return $this->jsonResponse(['cart' => $cart], 200, "Cart deleted successfully");
     }
 }

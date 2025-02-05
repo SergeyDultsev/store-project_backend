@@ -22,8 +22,8 @@ class AuthRequests extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
-            'password' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8',
         ];
     }
 
@@ -31,7 +31,10 @@ class AuthRequests extends FormRequest
     {
         return [
             'email.required' => 'Email is required',
+            'email.email' => 'The email must be a valid email address.',
+            'email.unique' => 'This email is already registered.',
             'password.required' => 'Password is required',
+            'password.min' => 'The password must be at least 8 characters.',
         ];
     }
 }

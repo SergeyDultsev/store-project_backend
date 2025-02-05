@@ -22,9 +22,9 @@ class RegisterRequests extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
+            'name' => 'required|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required',
+            'password' => 'required|min:8',
         ];
     }
 
@@ -32,8 +32,13 @@ class RegisterRequests extends FormRequest
     {
         return [
             'name.required' => 'Name is required',
+            'name.string' => 'The name must be a string.',
+            'name.max' => 'The name must not exceed 255 characters.',
             'email.required' => 'Email is required',
+            'email.email' => 'The email must be a valid email address.',
+            'email.unique' => 'This email is already registered.',
             'password.required' => 'Password is required',
+            'password.min' => 'The password must be at least 8 characters.',
         ];
     }
 }
