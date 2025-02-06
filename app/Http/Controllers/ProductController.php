@@ -49,7 +49,6 @@ class ProductController extends Controller
         if (!$product) return $this->jsonResponse([], 404, "Product not found");
 
         return $this->jsonResponse(new ProductResource($product), 200, "Successfully");
-
     }
 
     public function update(ProductRequests $request, $productId): JsonResponse

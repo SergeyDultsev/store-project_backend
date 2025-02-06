@@ -20,12 +20,11 @@ class ProductServices
         $product->product_id = Uuid::uuid4()->toString();
         $product->product_name = $data['name'];
         $product->product_price = $data['price'];
+        $product->save();
 
         if (isset($data['image']) && $data['image']) {
-            $product->addMediaFromRequest('image')->toMediaCollection('image');
+            $product->addMediaFromRequest('image')->toMediaCollection('image', 'public');
         }
-
-        $product->save();
     }
 
     public function showProduct(int $productId): ?Product
