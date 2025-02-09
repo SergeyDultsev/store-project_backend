@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderRequests;
 use App\Http\Resources\OrderResource;
 use App\Services\OrderServices;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -30,11 +30,15 @@ class OrderController extends Controller
                     'total' => $orderData->total(),
                     'last_page' => $orderData->lastPage(),
                 ]
-            ], 200, 'Order Not Found');
+            ], 200, 'Successfully');
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(OrderRequests $request): JsonResponse
     {
+        $orderData = $this->orderService->createOrder($request->all());
 
+        return $this->jsonResponse([
+            'order' => OrderResource::collection($orderData ?? []),
+        ], 201, 'Order Created Successfully');
     }
 }

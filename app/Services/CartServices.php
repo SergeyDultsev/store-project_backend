@@ -10,10 +10,12 @@ use Ramsey\Uuid\Uuid;
 class CartServices{
     public function indexCart(): LengthAwarePaginator
     {
-        return Cart::with('product')->paginate(100);
+        return Cart::with('product')
+            ->where('user_id', auth()->id())
+            ->paginate(100);
     }
 
-    public function addCart($productId): void
+    public function addCart($productId): object
     {
         $cart = new Cart();
         $cart->cart_id = Uuid::uuid4()->toString();
@@ -25,6 +27,10 @@ class CartServices{
         $product = Product::where("product_id", $productId)->first();
         $product->product_state = "in_cart";
         $product->save();
+
+        $cartData = Cart::with('user')
+            ->where('product_id', $productId)->first();
+        return $cartData;
     }
 
     public function updateCart($cartId, int $quantity): ?Cart

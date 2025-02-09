@@ -35,8 +35,8 @@ class CartController extends Controller
 
     public function store($productId): JsonResponse
     {
-        $this->cartServices->addCart($productId);
-        return $this->jsonResponse([], 201, 'Cart added successfully');
+        $cartData = $this->cartServices->addCart($productId);
+        return $this->jsonResponse(['product' => new CartResource($cartData)], 201, 'Cart added successfully');
     }
 
     public function show()

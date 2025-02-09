@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -22,3 +23,6 @@ Route::get('/cart', [CartController::class, 'index'])->middleware('auth:sanctum'
 Route::post('/cart/{id}', [CartController::class, 'store'])->middleware('auth:sanctum');
 Route::put('/cart/{id}', [CartController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->middleware('auth:sanctum');
+
+Route::get('/order', [OrderController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/order', [OrderController::class, 'store'])->middleware('auth:sanctum');

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->uuid('order_id')->primary();
             $table->uuid('user_id');
             $table->uuid('product_id')->nullable();
+            $table->integer('quantity');
+            $table->decimal('price');
             $table->timestamps();
 
             $table->foreign('product_id')->references('product_id')->on('products');

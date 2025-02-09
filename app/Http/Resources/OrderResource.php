@@ -19,6 +19,7 @@ class OrderResource extends JsonResource
             'product_id' => $this->resource->product->product_id,
             'product_name' => $this->resource->product->product_name,
             'product_price' => $this->resource->product->product_price,
+            'quantity' => $this->resource->quantity,
         ];
     }
 }

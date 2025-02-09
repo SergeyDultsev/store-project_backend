@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->use([
             \App\Http\Middleware\CorsMiddleware::class,
         ]);
+        $middleware->encryptCookies(except: [
+            'auth_token',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

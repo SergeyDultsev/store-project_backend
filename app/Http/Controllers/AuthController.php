@@ -43,7 +43,7 @@ class AuthController extends Controller
                 '/',
                 null,
                 false,
-                true
+                false
             );
     }
 
@@ -58,7 +58,7 @@ class AuthController extends Controller
                 '/',
                 null,
                 false,
-                true
+                false
             );
     }
 
