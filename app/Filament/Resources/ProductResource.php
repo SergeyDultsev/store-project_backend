@@ -23,7 +23,15 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('product_name')
+                    ->label('Название продукта')
+                    ->required()
+                    ->maxLength(255),
+
+                Forms\Components\TextInput::make('product_price')
+                    ->label('Цена')
+                    ->numeric()
+                    ->required(),
             ]);
     }
 
@@ -31,7 +39,14 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('product_name')
+                    ->label('Название')
+                    ->sortable()
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('product_price')
+                    ->label('Цена')
+                    ->sortable(),
             ])
             ->filters([
                 //
