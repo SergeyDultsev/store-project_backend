@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductResource extends JsonResource
 {
@@ -19,7 +18,7 @@ class ProductResource extends JsonResource
             'product_id' => $this->resource->product_id,
             'product_name' => $this->resource->product_name,
             'product_price' => $this->resource->product_price,
-            'product_state' => $this->resource->product_state,
+            'product_state' => 'available',
             'image_url' => $this->getFirstMediaUrl('image'),
         ];
     }

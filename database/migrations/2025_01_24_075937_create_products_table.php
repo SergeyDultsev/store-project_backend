@@ -15,7 +15,6 @@ return new class extends Migration
             $table->uuid('product_id')->primary();
             $table->string('product_name')->nullable();
             $table->decimal('product_price', 8, 2)->nullable();
-            $table->string('product_state')->default('available')->nullable();
             $table->timestamps();
         });
     }

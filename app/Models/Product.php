@@ -25,7 +25,6 @@ class Product extends Model implements HasMedia
         'product_id',
         'product_name',
         'product_price',
-        'product_state',
     ];
 
     public function getImageUrlAttribute()

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->uuid('order_id')->primary();
-            $table->uuid('user_id');
+            $table->uuid('user_id')->nullable();
             $table->uuid('product_id')->nullable();
-            $table->integer('quantity');
-            $table->decimal('price');
+            $table->integer('quantity')->nullable();
+            $table->decimal('price')->nullable();
             $table->timestamps();
 
             $table->foreign('product_id')->references('product_id')->on('products');

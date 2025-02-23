@@ -17,20 +17,26 @@ class CartServices{
 
     public function addCart($productId): object
     {
-        $cart = new Cart();
-        $cart->cart_id = Uuid::uuid4()->toString();
-        $cart->product_id = $productId;
-        $cart->user_id = auth()->id();
-        $cart->quantity = 1;
-        $cart->save();
+        $cartItem = Cart::where('product_id', $productId)
+            ->where('user_id', auth()->id())
+            ->first();
 
-        $product = Product::where("product_id", $productId)->first();
-        $product->product_state = "in_cart";
-        $product->save();
+        if($cartItem){
+            $cartItem->quantity += 1;
+            $cartItem->save();
+        } else {
+            $cart = new Cart();
+            $cart->cart_id = Uuid::uuid4()->toString();
+            $cart->product_id = $productId;
+            $cart->user_id = auth()->id();
+            $cart->quantity = 1;
+            $cart->save();
+        }
 
-        $cartData = Cart::with('user')
-            ->where('product_id', $productId)->first();
-        return $cartData;
+        return  Cart::with('product')
+            ->where('product_id', $productId)
+            ->where('user_id', auth()->id())
+            ->first();;
     }
 
     public function updateCart($cartId, int $quantity): ?Cart
@@ -49,12 +55,6 @@ class CartServices{
     {
         $cart = Cart::where("cart_id", $cartId)->first();
         if (!$cart) return null;
-
-        $productId = $cart->product_id;
-        $product = Product::where("product_id", $productId)->first();
-        $product->product_state = "available";
-        $product->save();
-
         $cart->delete();
         return $cart;
     }

@@ -22,7 +22,6 @@ class ProductFactory extends Factory
             'product_id' => Uuid::uuid4()->toString(),
             'product_name' => $this->faker->word(),
             'product_price' => $this->faker->randomFloat(2, 100, 10000),
-            'product_state' => 'available',
         ];
     }
 }

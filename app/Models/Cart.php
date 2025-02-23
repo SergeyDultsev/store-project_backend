@@ -32,4 +32,11 @@ class Cart extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function getStateAttribute()
+    {
+        return Cart::where('product_id', $this->product_id)
+            ->where('user_id', auth()->id())
+            ->exists() ? 'in_cart' : 'available';
+    }
 }
