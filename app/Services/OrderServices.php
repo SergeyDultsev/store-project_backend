@@ -33,11 +33,7 @@ class OrderServices{
             $order->price = $product['product_price'];
             $order->save();
 
-            $product = Product::where("product_id", $product['product_id'])->first();
-            if($product) {
-                $product->product_state = "available";
-                $product->save();
-            }
+            $cart->delete();
 
             $orderData[] = Order::with('product')->find($order->order_id);
         }
